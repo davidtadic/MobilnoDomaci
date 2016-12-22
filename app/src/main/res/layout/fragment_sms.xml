@@ -1,0 +1,44 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context="rs.fon.trecidomaci.fragments.SMSFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/send_sms_name"
+        android:textSize="24sp"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:ems="10"
+        android:id="@+id/send_sms_message"
+        android:layout_below="@+id/send_sms_name"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:textSize="20sp"
+        android:hint="@string/write_message"
+        android:inputType="textMultiLine"
+        android:gravity="top|left|center"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/send"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/shape_buttons"
+        android:layout_below="@+id/send_sms_message"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/send_button" />
+
+
+</RelativeLayout>
