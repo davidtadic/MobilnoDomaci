@@ -4,7 +4,7 @@
     <string name="number">Mobile number</string>
     <string name="email">Email</string>
     <string name="position">Position</string>
-    <string name="salary">Sallary</string>
+    <string name="salary">Sallary (USD)</string>
     <string name="enter">Enter</string>
     <string name="find_employee">Find</string>
     <string name="delete_employee">Delete Employee</string>
@@ -14,4 +14,10 @@
     <string name="send">Send</string>
     <string name="write_message">Write message</string>
     <string name="enter_id_of_employee">enter ID</string>
+    <string name="currency_converter">Currency Converter</string>
+    <string name="serbian_dinar">Serbian Dinar</string>
+    <string name="british_pound">British Pound</string>
+    <string name="euro">EURO</string>
+    <string name="your_salary_is">Your salary is</string>
+    <string name="salary_currency_converter">Salary Currency Converter</string>
 </resources>

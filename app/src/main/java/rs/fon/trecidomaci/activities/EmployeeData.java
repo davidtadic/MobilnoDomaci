@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,15 +23,17 @@ import android.widget.Toast;
 import rs.fon.trecidomaci.R;
 import rs.fon.trecidomaci.database.DatabaseHelper;
 import rs.fon.trecidomaci.database.EmployeesContract;
+import rs.fon.trecidomaci.fragments.CurrencyFragment;
 import rs.fon.trecidomaci.fragments.SMSFragment;
 import rs.fon.trecidomaci.model.Employee;
 
-public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFragmentInteractionListener {
+public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFragmentInteractionListener, CurrencyFragment.OnFragmentInteractionListener{
     private TextView idEmployee;
     private TextView name;
     private TextView number;
     private TextView email;
     private TextView position;
+    private Button salaryConverter;
     private TextView salary;
     private String id;
     private ImageButton call;
@@ -40,6 +43,7 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
     private DatabaseHelper dbHelper = null;
     private Employee employee = null;
     private SMSFragment smsFragment = null;
+    private CurrencyFragment currencyFragment = null;
     private String tempNumber;
     private String tempName;
 
@@ -61,6 +65,7 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
         salary = (TextView) findViewById(R.id.salary_employee);
         call = (ImageButton) findViewById(R.id.imageButtonCall);
         chat = (ImageButton) findViewById(R.id.imageButtonChat);
+        salaryConverter = (Button) findViewById(R.id.button_sallary);
 
         sharedPreferences = getSharedPreferences("employees", MODE_PRIVATE);
         id = sharedPreferences.getString("id_employee", "");
@@ -75,10 +80,6 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_DIAL);
                 i.setData(Uri.parse("tel:"+number.getText().toString()));
-                /*if (ActivityCompat.checkSelfPermission(EmployeeData.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getApplicationContext(), "You do not have permission for this action!", Toast.LENGTH_LONG).show();
-                    return;
-                }*/
                 startActivity(i);
             }
         });
@@ -88,6 +89,13 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
             public void onClick(View view) {
                 onSendSMS(number.getText().toString(), name.getText().toString());
 
+            }
+        });
+
+        salaryConverter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onViewCurrencyConverter(salary.getText().toString());
             }
         });
 
@@ -101,11 +109,21 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
         fragmentTransaction.commit();
     }
 
+    public void onViewCurrencyConverter(String salary){
+        currencyFragment = CurrencyFragment.newInstance(salary);
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_data, currencyFragment);
+        fragmentTransaction.commit();
+    }
+
     @Override
     public void onBackPressed() {
         if(smsFragment != null && smsFragment.isVisible()) {
             getFragmentManager().beginTransaction().remove(smsFragment).commit();
-        }else {
+        }else if(currencyFragment != null && currencyFragment.isVisible()) {
+            getFragmentManager().beginTransaction().remove(currencyFragment).commit();
+        }else{
             super.onBackPressed();
         }
     }
@@ -145,6 +163,14 @@ public class EmployeeData extends AppCompatActivity implements SMSFragment.OnFra
         Toast.makeText(getApplicationContext(),"SMS Sent",Toast.LENGTH_SHORT).show();
 
         startActivity(new Intent(getBaseContext(), ViewEmployees.class));
+    }
+
+    @Override
+    public void onRemoveFragment(String salary) {
+        if(currencyFragment != null && currencyFragment.isVisible()) {
+            getFragmentManager().beginTransaction().remove(currencyFragment).commit();
+        }
+        startActivity(new Intent(getBaseContext(), EmployeeData.class));
     }
 
 
